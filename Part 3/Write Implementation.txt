@@ -1,0 +1,69 @@
+const express = require("express");
+const mysql = require("mysql2");
+const app = express();
+const port = 3000;
+
+// ✅ MySQL connection
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "your_password",
+  database: "inventory_system"
+});
+
+// ✅ API: Get Low Stock Alerts for a Company
+app.get("/api/companies/:companyId/alerts/low-stock", (req, res) => {
+  const companyId = req.params.companyId;
+
+  // 🟡 Step 1: Get products with recent sales in last 30 days
+  const recentSalesQuery = `
+    SELECT DISTINCT p.id AS product_id, p.name AS product_name, p.sku,
+      i.warehouse_id, w.name AS warehouse_name, i.current_stock,
+      p.low_stock_threshold AS threshold,
+      s.id AS supplier_id, s.name AS supplier_name, s.contact_email
+    FROM sales sa
+    JOIN products p ON sa.product_id = p.id
+    JOIN inventory i ON i.product_id = p.id AND i.warehouse_id = sa.warehouse_id
+    JOIN warehouses w ON w.id = i.warehouse_id AND w.company_id = ?
+    JOIN suppliers s ON p.supplier_id = s.id
+    WHERE sa.sale_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+  `;
+
+  db.query(recentSalesQuery, [companyId], (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    const alerts = results
+      .filter(row => row.current_stock < row.threshold) // 🔴 Alert if below threshold
+      .map(row => {
+        // Estimate days until stockout (assume avg 1 unit/day as placeholder)
+        const avgDailySales = 1;
+        const daysUntilStockout = Math.floor(row.current_stock / avgDailySales);
+
+        return {
+          product_id: row.product_id,
+          product_name: row.product_name,
+          sku: row.sku,
+          warehouse_id: row.warehouse_id,
+          warehouse_name: row.warehouse_name,
+          current_stock: row.current_stock,
+          threshold: row.threshold,
+          days_until_stockout: daysUntilStockout,
+          supplier: {
+            id: row.supplier_id,
+            name: row.supplier_name,
+            contact_email: row.contact_email
+          }
+        };
+      });
+
+    res.json({ alerts, total_alerts: alerts.length });
+  });
+});
+
+// ✅ Start server
+app.listen(port, () => {
+  console.log(`Low stock alert API running at http://localhost:${port}`);
+});

@@ -1,0 +1,27 @@
+Hey, I’ve gone through the initial requirements and I’m trying to understand the full picture before I finalize the database design. I do have a few beginner-level doubts that I’d love to clarify with you, just to make sure I’m not missing anything important .
+
+1.About Companies & Warehouses
+Just checking — can a warehouse be linked to more than one company, or does each warehouse strictly belong to one company only?
+Do we need to store the full address for each warehouse? Like city, pincode, etc.? Or is just the warehouse name enough?
+Do warehouses have any storage limit? Like, do we need to track how much quantity they can hold in total or per product?
+
+2. About Products & Inventory
+Do the products have any types or categories? Like, should we mention if it’s raw material or finished item?
+Should we also track the price or cost of a product? And if yes, will the price vary depending on which warehouse it’s stored in?
+Do any products have expiry dates? Should I add a column for that, or not needed?
+If a product becomes out of stock in a warehouse, should we store that status anywhere or notify someone?
+
+3.About Inventory Changes
+Just to clarify — what are the usual reasons that inventory quantity changes? Like is it because of purchase, return, or damage?
+Do we also need to store who made the inventory change? Like the employee or system that updated it?
+We are tracking quantity changes, but should I also store the date and time of the change?
+
+4.About Suppliers
+Can one supplier supply products to multiple companies, or is it always linked to just one?
+Also, do we need to keep contact details of suppliers like phone number, email, etc.?
+
+5. About Bundled Products
+If a product is a bundle, should I store the list of products inside that bundle in a separate table?
+Also, can a bundle contain other bundles inside it? Or just individual items only?
+
+These were some of the things I wasn’t totally sure about while trying to design the tables. Just wanted to double check before moving forward, so that we don’t miss anything important later 

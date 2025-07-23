@@ -1,0 +1,10 @@
+| Issue No. | Problem Description                                                                        | Type           |
+| --------- | ------------------------------------------------------------------------------------------ | -------------- |
+| 1         | No input validation – if required fields are missing, app will crash                       | Technical      |
+| 2         | `sku` should be unique, but code does not check it                                         | Business Logic |
+| 3         | `price` might be decimal but could cause error if passed as string                         | Technical      |
+| 4         | No error handling – if DB fails or input is invalid, app crashes                           | Technical      |
+| 5         | If `product` creation succeeds but `inventory` fails, DB is inconsistent (partial commit)  | Technical      |
+| 6         | Doesn’t support optional fields (e.g., maybe `warehouse_id` is optional for some products) | Business Logic |
+| 7         | Doesn’t return proper HTTP status codes                                                    | Technical      |
+| 8         | No documentation on expected JSON format                                                   | Business       |

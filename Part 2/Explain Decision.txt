@@ -1,0 +1,36 @@
+Here’s how I approached the database design and why I made certain decisions based on the requirements.”
+
+ 1. Table Design
+I created separate tables for companies, warehouses, products, inventory, suppliers, product_bundles, and inventory_changes to normalize the data and reduce duplication.
+
+I added linking tables like inventory (to connect products and warehouses) and product_bundles (to map bundles to regular products) for flexibility.
+
+ 2. Primary Keys and Foreign Keys
+I used AUTO_INCREMENT or SERIAL for primary keys (like product_id, warehouse_id, etc.) to uniquely identify each record.
+
+I added foreign key constraints between related tables (e.g., warehouse has a foreign key to company) to ensure data consistency — like preventing a warehouse from being added for a non-existing company.
+
+3. Data Types
+I chose VARCHAR for names and descriptions, INT for quantities and IDs, and TIMESTAMP for tracking changes or created dates.
+
+I used ENUM or VARCHAR for fixed values like change_type (add/remove/transfer) to restrict possible inputs.
+
+4. Indexes
+I added indexes on foreign keys like product_id, warehouse_id, and supplier_id to make JOINs and lookups faster — especially for queries like “show me inventory of this product across warehouses”.
+
+I also considered composite indexes in the inventory table on (warehouse_id, product_id) since these two are frequently used together.
+
+ 5. Constraints
+I used NOT NULL constraints to avoid missing critical info like product_name or quantity.
+
+I added UNIQUE constraints where needed — for example, maybe the same product shouldn't exist twice in the same warehouse in the inventory table.
+
+For product_bundles, I made sure one product can't be a bundle of itself (to prevent circular dependencies).
+
+ 6. Tracking Changes
+I created a separate inventory_changes table instead of storing the change history inside the inventory table — this helps us keep historical records clean and query them separately without affecting current stock levels.
+
+7. Scalability & Simplicity
+I kept the schema normalized to avoid redundancy.
+
+At the same time, I tried not to overcomplicate relationships so it's easier to manage, especially for a growing team or future developers.

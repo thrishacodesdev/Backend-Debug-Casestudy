@@ -1,0 +1,10 @@
+| Issue | Impact in Production                                                       |
+| ----- | -------------------------------------------------------------------------- |
+| 1     | Unexpected crashes and 500 errors if request body is missing required keys |
+| 2     | Duplicate `sku`s can break product listing, orders, and inventory logic    |
+| 3     | Wrong data types can crash or corrupt price records                        |
+| 4     | Bad user experience – client receives unclear error                        |
+| 5     | Inconsistent DB state – product exists without inventory                   |
+| 6     | Inflexibility in business logic for future product types                   |
+| 7     | Poor API integration experience for frontend/mobile                        |
+| 8     | Developers may get confused while consuming API                            |

@@ -1,0 +1,7 @@
+No recent sales → no alert
+
+Products above threshold → excluded
+
+SQL joins safely ensure correct warehouse-company link
+
+Average daily sale rate is assumed as 1 (you can improve later)
